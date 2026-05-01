@@ -56,3 +56,35 @@ def generate_uv_coverage_vectorized(antennas, H0_hours, H1_hours, dec_degree, la
     uv_tracks_full = numpy.concatenate([uv_tracks, -uv_tracks], axis=0)
 
     return uv_tracks_full
+
+import numpy as np
+
+def create_uv_mask(uv_tracks, grid_size=128):
+    """
+    Takes continuous (u,v) tracks and drops them onto a discrete 2D pixel grid.
+    """
+    grid = np.zeros((grid_size, grid_size))
+    
+    # Find the maximum u or v value to scale the grid properly
+    max_uv = np.max(np.abs(uv_tracks))
+    
+    if max_uv == 0:
+        return grid
+
+    # Extract the u and v columns
+    u = uv_tracks[:, 0]
+    v = uv_tracks[:, 1]
+    
+    # Translate the continuous coordinates into integer pixel indices
+    u_idx = np.round(((u + max_uv) / (2 * max_uv)) * (grid_size - 1)).astype(int)
+    v_idx = np.round(((max_uv - v) / (2 * max_uv)) * (grid_size - 1)).astype(int)
+    
+    # Filter out any points that accidentally fall outside the grid boundaries
+    valid_mask = (u_idx >= 0) & (u_idx < grid_size) & (v_idx >= 0) & (v_idx < grid_size)
+    u_idx = u_idx[valid_mask]
+    v_idx = v_idx[valid_mask]
+    
+    # Set the touched pixels to 1
+    grid[v_idx, u_idx] = 1
+    
+    return grid
