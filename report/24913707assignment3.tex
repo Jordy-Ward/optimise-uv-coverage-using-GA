@@ -41,7 +41,7 @@ This study investigates the discrete selection of a 16-antenna subset from the 6
 maximise central $uv$-coverage density for high-fidelity image reconstruction. A trajectory-based Simulated 
 Annealing (SA) algorithm was empirically compared against four configurations of a population-based Genetic 
 Algorithm (GA) utilising a Gaussian-weighted spatial frequency objective function. Results across 30 independent 
-executions demonstrate that SA significantly outperforms all evolutionary variants ($p = 1.40 \times 10^{-11}$). 
+executions demonstrate that SA significantly outperforms all evolutionary variants ($p = 1.88445 \times 10^{-11}$). 
 Topographic analysis reveals that SA successfully isolated a centrally clustered antenna geometry that perfectly 
 aligned with the weighted objective. Conversely, the GA configurations suffered from premature convergence, as the 
 intersection crossover operator proved destructive to high-fitness spatial neighbourhood traits. These findings 
@@ -81,6 +81,12 @@ Simulated annealing employed a trajectory-based thermodynamic model to refine a 
 The empirical performance of the algorithmic variants was compared to determine the most effective 
 search strategy for $uv$-coverage optimisation.
 
+Empirical results across 30 independent executions demonstrate that simulated annealing 
+significantly outperformed all evolutionary configurations. The thermodynamic search 
+discovered a centrally clustered antenna geometry that the crossover-based recombination 
+operator was structurally unable to produce, establishing the superiority of trajectory-based 
+exploitation for this discrete, Gaussian-weighted optimisation problem.
+
 The remainder of the document is structured as follows. Section 2 provides the theoretical 
 background of radio interferometry and defines the metaheuristic search algorithms. Section 3 
 details the methodology and structural design used to implement the algorithms. Section 4 
@@ -88,8 +94,8 @@ describes the empirical procedure and parameter configurations followed during e
 Section 5 presents the research results and convergence analysis. Finally, Section 6 summarises 
 the findings and concludes the report.
 
-In summary, the Introduction section introduced the core objectives of the study and established the combinatorial complexity of the antenna layout problem. The Introduction section also outlined the comparative metaheuristic approach subsequently explored.
-
+The following section establishes the theoretical foundation of radio interferometry and 
+the metaheuristic methods applied to the optimisation problem.
 \section{Background}
 
 The background section provides the theoretical context and outline for the remainder of the discussion. 
@@ -162,13 +168,32 @@ metaheuristics to balance the exploration of the vast combinatorial space with t
 high-fitness local regions~\cite{engelbrecht2007}.
 
 \subsection{Computational Intelligence Metaheuristics}
-The combinatorial explosion of the antenna placement problem requires advanced search techniques. 
-Two prevalent metaheuristics applied to the domain are genetic algorithms and simulated annealing. 
+The combinatorial explosion of the antenna placement problem requires advanced search 
+techniques. Two prevalent metaheuristics applied to the domain are genetic algorithms 
+and simulated annealing. Population-based methods maintain a set of candidate solutions 
+and use selection and recombination to propagate fit traits across successive generations, 
+enabling simultaneous exploration of multiple regions of the search landscape. 
+Trajectory-based methods instead track a single candidate solution and employ stochastic 
+acceptance criteria to escape local optima that would trap traditional hill-climbing 
+approaches. The two paradigms represent fundamentally different strategies for navigating 
+the exploration-exploitation trade-off inherent to all combinatorial optimisation problems~\cite{engelbrecht2007}.
 
 \subsection{Review of Current Literature}
-The optimisation of radio interferometry arrays is a well-documented challenge in astronomical literature. Previous studies addressed the antenna placement problem using various computational techniques. For example, Smith \textit{et al.} utilised Particle Swarm Optimisation to determine continuous geographical coordinates for theoretical telescope arrays~\cite{smith_pso}. Similarly, Jones and Doe applied standard evolutionary algorithms to optimise Very Long Baseline Interferometry networks across global distances~\cite{jones_doe}. The majority of the existing literature focuses on continuous optimisation, where antennas are mathematically permitted to occupy any arbitrary coordinate on the planetary surface. 
+The optimisation of radio interferometry arrays is a well-documented challenge in 
+astronomical literature. Prior work has addressed the antenna placement problem using continuous optimisation 
+techniques, including particle swarm optimisation and standard evolutionary algorithms 
+applied to Very Long Baseline Interferometry networks~\cite{thompson2017}. The majority 
+of this literature permits antennas to occupy arbitrary geographical coordinates rather 
+than a fixed discrete grid.
 
-The current empirical study differs from the established literature by framing the optimisation strictly as a discrete subset selection problem. The physical infrastructure of the MeerKAT observatory restricts antenna placement to a fixed grid of 64 pre-constructed pads. Therefore, the algorithm must select exactly 16 discrete locations rather than generating continuous coordinates. Furthermore, the current study explicitly investigates the application of fitness sharing mechanisms. The literature rarely addresses the specific use of diversity maintenance to navigate the highly deceptive, discrete search landscape of the MeerKAT $uv$-plane.
+The current empirical study differs from the established literature by framing the 
+optimisation strictly as a discrete subset selection problem. The physical 
+infrastructure of the MeerKAT observatory restricts antenna placement to a fixed 
+grid of 64 pre-constructed pads. Therefore, the algorithm must select exactly 16 
+discrete locations rather than generating continuous coordinates. Furthermore, the 
+current study explicitly investigates the application of fitness sharing mechanisms. 
+The literature rarely addresses the specific use of diversity maintenance to navigate 
+the highly deceptive, discrete search landscape of the MeerKAT $uv$-plane.
 
 \subsection{Justification of Metaheuristic Selection}
 The discrete combinatorial explosion of the subset selection problem renders traditional deterministic 
@@ -240,8 +265,9 @@ The procedural flow of the SA is outlined in Algorithm 2.
 \end{algorithmic}
 \end{algorithm}
 
-In summary, the Background section detailed the theoretical foundation of aperture synthesis and the $uv$-plane. The Background section formalised the subset selection problem and introduced genetic algorithms and simulated annealing as the metaheuristic methodologies used to navigate the deceptive search landscape.
-
+The following section details the specific implementation of the objective function, the 
+simulated annealing baseline, and the four genetic algorithm configurations evaluated 
+during the empirical study.
 \section{Methodology}
 
 The methodology section details the structural design and configuration of the metaheuristic algorithms evaluated during the 
@@ -325,6 +351,23 @@ The empirical process evaluated the following four evolutionary configurations:
     \item \textbf{Enhanced Diversity Maintenance:} A fitness sharing mechanism utilising an expanded niche radius was implemented. The expanded radius aggressively penalised candidate configurations possessing high spatial similarity. The spatial penalty forced the population to distribute across multiple distinct peaks in the search landscape rather than converging on a single topography.
     \item \textbf{High-Frequency Mutation:} The probability of mutation was substantially increased. The increased mutation rate injected a high degree of stochastic variation into the offspring generation. The stochastic variation tested the ability of the algorithm to escape deep local optima through continuous, aggressive perturbation.
 \end{enumerate}
+
+\subsection{Fitness Sharing Mechanism}
+To maintain population diversity, a fitness sharing penalty was applied to the raw fitness 
+scores prior to selection. For each individual $i$, the shared fitness $f'_i$ is computed 
+by dividing the raw fitness $f_i$ by the niche count $m_i$, defined as the sum of sharing 
+function values across all population members:
+\begin{equation}
+f'_i = \frac{f_i}{m_i}, \quad \text{where} \quad m_i = \sum_{j=1}^{N} sh(d_{ij})
+\end{equation}
+The sharing function $sh(d_{ij})$ penalises individuals based on their Hamming distance 
+$d_{ij}$, defined as the number of antenna positions that differ between two binary 
+configurations. The penalty is applied within a niche radius $\sigma_{share}$:
+\begin{equation}
+sh(d_{ij}) = \begin{cases} 1 - \dfrac{d_{ij}}{\sigma_{share}} & \text{if } d_{ij} < \sigma_{share} \\ 0 & \text{otherwise} \end{cases}
+\end{equation}
+Individuals within the niche radius receive reduced effective fitness, discouraging the 
+population from clustering around a single dominant solution.
 
 To summarise, the methodology section defined the weighted $uv$-coverage density objective function. The 
 section detailed the simulated annealing baseline and the four genetic algorithm configurations implemented 
@@ -430,7 +473,7 @@ score achieved at the termination of the computational budget.
             \toprule
             \textbf{Algorithm} & \textbf{Max} & \textbf{Min} & \textbf{Mean} & \textbf{Std.\ Dev.} \\
             \midrule
-            Simulated Annealing         & 14938.94 & 14816.51 & 14930.92 & 23.68 \\
+            Simulated Annealing         & 14938.94 & 14816.51 & 14926.24 & 26.70 \\
             GA: Standard Baseline       & 14781.16 & 14621.76 & 14683.01 & 37.87 \\
             GA: Variant Two (Diversity) & 14695.71 & 14571.06 & 14615.30 & 35.84 \\
             GA: Variant Three (Mutation)& 14571.19 & 14373.44 & 14452.49 & 48.64 \\
@@ -441,17 +484,17 @@ score achieved at the termination of the computational budget.
 \end{table}
  
 Simulated annealing achieved the highest maximum fitness score of 14938.94, the highest mean
-score of 14930.92, and the narrowest performance range of 122.43 points across all 30 runs.
-The low standard deviation of 23.68 and the narrow range together confirm that the
+score of 14926.24, and the narrowest performance range of 122.43 points across all 30 runs.
+The low standard deviation of 26.70 and the narrow range together confirm that the
 trajectory-based configuration was highly robust, consistently discovering near-optimal regions
-of the search landscape regardless of stochastic initialisation. This outcome is consistent
+of the search landscape regardless of stochastic initialisation. The outcome is consistent
 with the theoretical expectation that a slow geometric cooling schedule would allow the
 algorithm to converge reliably from any starting point, as the Metropolis criterion suppresses
 the influence of the initial random configuration during the high-temperature exploration phase.
  
 Conversely, all four genetic algorithm configurations failed to surpass the simulated annealing
 baseline. The Standard Baseline achieved the highest mean among evolutionary configurations at
-14683.01, representing a deficit of 247.91 points relative to the simulated annealing mean.
+14683.01, representing a deficit of 243.23 points relative to the simulated annealing mean.
 Variant One and Variant Three exhibited the highest standard deviations of 44.15 and 48.64
 respectively, and the widest performance ranges, indicating severe run-to-run inconsistency.
 The elevated variance in these configurations suggests that reducing selection pressure or
@@ -471,8 +514,7 @@ exploitation dynamics and final performance discrepancies between configurations
     \centering
     \includegraphics[width=\linewidth]{../out/convergence_comparison_30runs.png}
     \caption{Macroscopic average convergence trajectories illustrating the rapid initialisation
-             and early exploration phase across all configurations. Shaded bands represent one
-             standard deviation across 30 independent runs.}
+             and early exploration phase across all configurations.}
     \label{fig:convergence_full}
 \end{figure}
  
@@ -480,21 +522,20 @@ exploitation dynamics and final performance discrepancies between configurations
     \centering
     \includegraphics[width=\linewidth]{../out/zoomed_convergence_comparison_30runs.png}
     \caption{Isolated convergence trajectories illustrating the late-stage exploitation phase
-             and final objective scores. The performance separation between simulated annealing
-             and all genetic algorithm variants is clearly visible.}
+             and final objective scores.}
     \label{fig:convergence_zoom}
 \end{figure}
  
 \subsubsection{Simulated Annealing Trajectory}
 The macroscopic view confirms that simulated annealing began with the lowest initial
-performance among all configurations. This is the expected behaviour of a trajectory-based
+performance among all configurations. The expected behaviour of a trajectory-based
 algorithm initialising from a single random 16-antenna layout: the first evaluation reflects
 purely random placement, and the cooling schedule must invest many early iterations in
 thermodynamic exploration before meaningful exploitation can occur. Despite this slow start,
 the algorithm demonstrated continuous, uninterrupted improvement throughout the full evaluation
 budget. By approximately 200,000 evaluations, simulated annealing surpassed the final
 performance of the Standard Baseline GA and continued to improve for the remaining 300,000
-iterations. This sustained late-stage gain is consistent with the theoretical behaviour of a
+iterations. The sustained late-stage gain is consistent with the theoretical behaviour of a
 well-calibrated geometric cooling schedule, wherein the temperature decreases sufficiently
 slowly to permit fine-grained local refinement during the final exploitation phase.
  
@@ -504,7 +545,7 @@ convergence profile. All evolutionary configurations achieved rapid performance 
 the first 50,000 evaluations, rising from random initialisation to scores in the range of
 14,300--14,600. However, as evidenced in Figure~\ref{fig:convergence_zoom}, all four genetic
 algorithm variants plateaued at approximately 150,000 evaluations, after which no meaningful
-improvement was observed across the remaining 350,000 evaluations. This early stagnation was
+improvement was observed across the remaining 350,000 evaluations. The early stagnation was
 not expected at the outset of the study, given that the intersection crossover operator was
 specifically designed to preserve structural constraints and propagate high-performing
 sub-configurations.
@@ -512,7 +553,7 @@ sub-configurations.
 The premature convergence is most plausibly attributed to the destructive nature of the
 intersection crossover operator in this specific discrete landscape. When two high-performing
 16-antenna layouts share only a small subset of common active pads, the crossover operation
-randomly distributes the remaining positions. This random distribution destroys the specific
+randomly distributes the remaining positions. The random distribution destroys the specific
 geometric neighbourhood relationships between antenna pairs that produce high-density UV tracks.
 The recombination therefore creates offspring that are structurally novel but perform no better
 than their parents. The shaded standard deviation bands in both figures provide additional
@@ -548,7 +589,7 @@ convergence trajectories that were consistently below the Standard Baseline desp
 identical selection pressure and mutation parameters. The expanded radius aggressively penalised
 structurally similar individuals, forcing the population to distribute across multiple distinct
 fitness peaks. However, the penalty function effectively reduced the selective advantage of the
-highest-performing configurations by equalizing their adjusted fitness with that of inferior
+highest-performing configurations by equalising their adjusted fitness with that of inferior
 alternatives. As a result, the algorithm retained mathematically inferior candidate solutions
 in the population in exchange for diversity that provided no benefit, given that the
 near-optimal configurations were clustered in a single well-defined region of the search space.
@@ -583,7 +624,7 @@ The Mann-Whitney U test was selected due to its non-parametric nature, as metahe
 performance distributions cannot be assumed to be Gaussian.
  
 Comparison of the Standard Baseline GA against simulated annealing yielded a $p$-value of
-$1.40 \times 10^{-11}$. The calculated value was strictly less than the $\alpha$ threshold by
+$1.88445 \times 10^{-11}$. The calculated value was strictly less than the $\alpha$ threshold by
 a margin of eleven orders of magnitude. Therefore, the null hypothesis was rejected. The
 statistical rejection definitively confirms that the simulated annealing algorithm was
 significantly superior to the best evolutionary configuration for the discrete MeerKAT antenna
@@ -626,8 +667,7 @@ window projected onto a $1024 \times 1024$ spatial frequency grid.
     \centering
     \includegraphics[width=\linewidth]{../out/ga_uv.png}
     \caption{High-resolution $uv$-coverage tracks generated by the optimal genetic algorithm
-             layout. The hot colour map indicates sampled spatial frequency pixels, with brighter
-             regions corresponding to denser baseline track overlap.}
+             layout.}
     \label{fig:ga_uv}
 \end{figure}
 
@@ -635,8 +675,7 @@ window projected onto a $1024 \times 1024$ spatial frequency grid.
     \centering
     \includegraphics[width=\linewidth]{../out/sa_physical.png}
     \caption{Physical spatial layout of the optimal 16-antenna configuration discovered by
-             simulated annealing. The pronounced central clustering of antenna positions is
-             visually apparent relative to the more dispersed genetic algorithm solution.}
+             simulated annealing.}
     \label{fig:sa_physical}
 \end{figure}
 
@@ -644,8 +683,7 @@ window projected onto a $1024 \times 1024$ spatial frequency grid.
     \centering
     \includegraphics[width=\linewidth]{../out/sa_uv.png}
     \caption{High-resolution $uv$-coverage tracks generated by the optimal simulated annealing
-             layout. The dense central sampling region reflects the short-baseline geometry of
-             the clustered physical configuration.}
+             layout.}
     \label{fig:sa_uv}
 \end{figure}
 
@@ -654,7 +692,7 @@ two search strategies. The optimal SA configuration isolates a layout with a den
 concentrated central core of antennas surrounded by a sparse outer ring. The concentrated
 core generates an extensive volume of short baseline vectors, which map directly to the central
 region of the $uv$-plane and coincide precisely with the high-value region of the Gaussian
-weighting matrix applied by the objective function. This geometric strategy is the
+weighting matrix applied by the objective function. The geometric strategy is the
 theoretically natural response to a centrally weighted objective: an algorithm that
 successfully exploits the local landscape around short-baseline configurations will inevitably
 converge on a physically clustered solution. The fact that simulated annealing discovered this
@@ -670,7 +708,7 @@ $uv$-plane pixels, as is visible in Figure~\ref{fig:ga_uv}. However, the dispers
 geometry produces a comparatively sparse central sampling region that fails to capture the
 heavily weighted core of the Gaussian mask. The total weighted fitness score is consequently
 inferior despite the GA configuration achieving a larger unweighted spatial coverage area.
-This result also explains why extending the genetic algorithm budget beyond 1,000 generations
+The result also explains why extending the genetic algorithm budget beyond 1,000 generations
 would not resolve the performance gap: the stagnated population had converged on a dispersed
 topology that is locally stable under intersection crossover, and the recombination operator
 lacked the capacity to transition the population toward the centrally clustered geometry that
@@ -697,7 +735,7 @@ stagnation as the primary limitation of the evolutionary configurations, attribu
 destructive effect of intersection crossover on geometric antenna sub-pairings, and
 demonstrated that neither reduced selection pressure, aggressive fitness sharing, nor elevated
 mutation rates resolved this limitation. The statistical analysis confirmed the superiority of
-simulated annealing with a $p$-value of $1.40 \times 10^{-11}$, eleven orders of magnitude
+simulated annealing with a $p$-value of $1.88445 \times 10^{-11}$, eleven orders of magnitude
 below the significance threshold, while simultaneously and decisively invalidating the
 diversity maintenance hypothesis. Finally, the topographic analysis linked the numerical
 advantage of simulated annealing to its discovery of a physically clustered antenna geometry
@@ -711,7 +749,7 @@ central $uv$-coverage. A baseline genetic algorithm (GA), three genetic algorith
 were evaluated across 30 runs using the same Gaussian-weighted objective. 
 
 The main finding was clear: SA consistently outperformed all GA configurations and did so 
-by a statistically significant margin ($p = 1.40 \times 10^{-11}$). The GA variants did not 
+by a statistically significant margin ($p = 1.88445 \times 10^{-11}$). The GA variants did not 
 recover performance through reduced selection pressure, fitness sharing, or higher mutation. 
 Instead, the GA variants tended to stagnate, indicating that the intersection crossover operator disrupted 
 the spatial antenna relationships needed for high central density.
@@ -722,6 +760,20 @@ remained more dispersed and therefore underweighted in the core. The contrast un
 the importance of operator and landscape alignment. Population diversity alone cannot compensate 
 for recombination operators that fail to preserve the spatial structures that the objective 
 function rewards.
+
+The assignment yielded several important insights into the relationship between algorithm 
+design and problem landscape topology. The most significant lesson was that operator 
+choice is not a secondary concern: the intersection crossover operator, while elegant in 
+preserving the cardinality constraint, proved fundamentally misaligned with the geometric 
+structure of the objective function. The result highlights that metaheuristic performance cannot 
+be evaluated in isolation from the problem domain. Additionally, the experiment demonstrated 
+that diversity mechanisms such as fitness sharing are only beneficial when the fitness 
+landscape contains multiple well-separated optima of comparable quality. When the global 
+optimum lies in a single clustered region, as in this case, diversity enforcement actively 
+hinders convergence. Finally, the study reinforced the value of statistical rigour: without 
+the 30-run sampling and Mann-Whitney analysis, the consistent superiority of simulated 
+annealing could have been attributed to a fortunate initialisation rather than a structural 
+algorithmic advantage.
 
 Future work should test alternative crossover or repair operators designed to preserve 
 geometric neighbourhoods, and repeat the comparison under a flat $uv$ weighting to assess 
@@ -759,25 +811,15 @@ how the ranking changes when central density is not prioritised.
 
 \begin{thebibliography}{9}
 
-% Standard text for CI courses at Stellenbosch
-\bibitem{engelbrecht2007}
-A. P. Engelbrecht, \emph{Computational Intelligence: An Introduction}, 2nd ed. Chichester, U.K.: John Wiley \& Sons, 2007.
-
-% The definitive textbook for Radio Astronomy
-\bibitem{thompson2017}
-A. R. Thompson, J. M. Moran, and G. W. Swenson Jr., \emph{Interferometry and Synthesis in Radio Astronomy}, 3rd ed. Cham, Switzerland: Springer, 2017.
-
-% Your existing placeholder, fully formatted
 \bibitem{bremermann1962}
 H. J. Bremermann, ``Optimization through evolution and recombination,'' in \emph{Self-Organizing Systems}, M. C. Yovits, G. T. Jacobi, and G. D. Goldstein, Eds. Washington, DC, USA: Spartan Books, 1962, pp. 93--106.
 
-% Placeholder for the Smith paper mentioned in Section 2.5
-\bibitem{smith_pso}
-J. Smith, A. Person, and B. Scientist, ``Particle swarm optimization for continuous telescope array configurations,'' \emph{Journal of Astronomical Instrumentation}, vol. 12, no. 3, pp. 104--118, 2020.
+\bibitem{engelbrecht2007}
+A. P. Engelbrecht, \emph{Computational Intelligence: An Introduction}, 2nd ed. Chichester, U.K.: John Wiley \& Sons, 2007.
 
-% Placeholder for the Jones and Doe paper mentioned in Section 2.5
-\bibitem{jones_doe}
-A. Jones and J. Doe, ``Evolutionary algorithms for very long baseline interferometry,'' \emph{IEEE Transactions on Evolutionary Computation}, vol. 25, no. 4, pp. 600--612, 2021.
+\bibitem{thompson2017}
+A. R. Thompson, J. M. Moran, and G. W. Swenson Jr., \emph{Interferometry and Synthesis in Radio Astronomy}, 3rd ed. Cham, Switzerland: Springer, 2017.
+
 
 \end{thebibliography}
 
