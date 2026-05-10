@@ -1,12 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1778432732.30806 "/home/jordy/Documents/Computational/optimise-uv-coverage-using-GA/report/24913707assignment3.tex" "24913707assignment3.pdf" "24913707assignment3" 1778432733.84259 0
+["pdflatex"] 1778435369.05028 "/home/jordy/Documents/Computational/optimise-uv-coverage-using-GA/report/24913707assignment3.tex" "24913707assignment3.pdf" "24913707assignment3" 1778435370.62135 0
   "../out/convergence_comparison_30runs.png" 1777986636.69813 452690 ce85909a9847fdec2cae712c54670b40 ""
   "../out/ga_physical.png" 1777970304.99766 58057 91bb0abe06cb8052a31b1ef8daea1089 ""
   "../out/ga_uv.png" 1777970305.33265 1279311 2e9a9244fd7d1169b4b01793cdae049f ""
   "../out/sa_physical.png" 1777970305.44431 63632 b71e05c3eb9ea607638200b0a0b241c7 ""
   "../out/sa_uv.png" 1777970305.76764 1220516 870781cb2df2f740d7870297471c9476 ""
   "../out/zoomed_convergence_comparison_30runs.png" 1778151951.95562 638923 c688c5855d2e6518a581feac37856f48 ""
-  "/home/jordy/Documents/Computational/optimise-uv-coverage-using-GA/report/24913707assignment3.tex" 1778432732.12101 58942 118dcd2d5fe942096e29f561dea59d51 ""
+  "/home/jordy/Documents/Computational/optimise-uv-coverage-using-GA/report/24913707assignment3.tex" 1778435368.88368 58911 7474a1c17a1384ecc9b7fa53e4f43fc1 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1775001600 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -107,8 +107,8 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1775001600 40900 887e0dc8cac988a9e9c574af364cf837 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1776419423.72517 4602615 ac1019cb4c4ba39710c2cf7f752b378d ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1776419164 7753794 e8411d45cda8a76a4833877ab1f9fbd9 ""
-  "24913707assignment3.aux" 1778432733.80768 7615 76979f114ce7fad8527747466183ad7d "pdflatex"
-  "24913707assignment3.tex" 1778432732.12101 58942 118dcd2d5fe942096e29f561dea59d51 ""
+  "24913707assignment3.aux" 1778435370.58347 7615 76979f114ce7fad8527747466183ad7d "pdflatex"
+  "24913707assignment3.tex" 1778435368.88368 58911 7474a1c17a1384ecc9b7fa53e4f43fc1 ""
   "meerKatUV.png" 1777641578.93427 105116 63622f53cf86965d3336f5ecbdcf8453 ""
   "uvPlaneWeight.png" 1777638774.86644 48729 8935726e09495bf93e82185e5df1468f ""
   (generated)

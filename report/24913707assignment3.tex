@@ -411,9 +411,17 @@ The simulated annealing algorithm required the specification of an initial tempe
 To guarantee equitable computational expenditure across the differing heuristic methodologies, the simulated annealing algorithm executed for exactly 500,000 iterations. The iteration limit perfectly matched the total number of objective function evaluations performed by the genetic algorithms.
 
 \subsection{Genetic Algorithm Configurations}
-The four genetic algorithm configurations shared a common foundational structure. All variants utilised a static population size of 500 individuals. The evolutionary process executed for a maximum of 1000 generations per independent run. The multiplication of 500 individuals by 1000 generations yielded a maximum of 500,000 objective function evaluations per execution. An intersection crossover operator was applied unconditionally during parent recombination. Furthermore, a strict elitism mechanism preserved the single highest-scoring individual across every generation boundary.
+The four genetic algorithm configurations shared a common foundational structure. 
+All variants utilised a static population size of 500 individuals. The evolutionary 
+process executed for a maximum of 1000 generations per independent run. The multiplication 
+of 500 individuals by 1000 generations yielded a maximum of 500,000 objective function 
+evaluations per execution. An intersection crossover operator was applied unconditionally 
+during parent recombination. Furthermore, a strict elitism mechanism preserved the single 
+highest-scoring individual across every generation boundary.
 
-The experimental variants modified specific control parameters to isolate the effects of selection pressure, diversity maintenance, and mutation frequency. The exact parameter configurations for the four evolutionary variants are summarised in Table~\ref{tab:ga_parameters}. 
+The experimental variants modified specific control parameters to isolate the effects of 
+selection pressure, diversity maintenance, and mutation frequency. The exact parameter 
+configurations for the four evolutionary variants are summarised in Table~\ref{tab:ga_parameters}. 
 
 \begin{table}[htbp]
     \centering
@@ -422,25 +430,27 @@ The experimental variants modified specific control parameters to isolate the ef
     \setlength{\tabcolsep}{4pt}
     \renewcommand{\arraystretch}{1.05}
     \footnotesize
-    \resizebox{\columnwidth}{!}{%  <--- CHANGED THIS LINE
+    \resizebox{\columnwidth}{!}{
         \begin{tabular}{@{}lccc@{}}
             \toprule
             \textbf{Configuration} & \textbf{Tournament Size} & \textbf{Mutation Rate} & \textbf{Niche Radius} \\
             \midrule
             Standard Baseline & 5 & 0.15 & N/A \\
-            Variant One Reduced Selection & 2 & 0.15 & N/A \\
-            Variant Two Enhanced Diversity & 5 & 0.15 & 12 \\
-            Variant Three High Mutation & 3 & 0.25 & N/A \\
+            Variant 1 Reduced Selection & 2 & 0.15 & N/A \\
+            Variant 2 Enhanced Diversity & 5 & 0.15 & 12 \\
+            Variant 3 High Mutation & 3 & 0.25 & N/A \\
             \bottomrule
         \end{tabular}%
     }
 \end{table}
 
 The Standard Baseline utilised a tournament size of five and a mutation probability of 0.15. A tournament size of five provided strong, 
-baseline selection pressure. Tournament selection exerts pressure proportional to tournament size: a larger pool increases the probability that the highest-fitness individual is selected, thereby amplifying the reproductive advantage of superior configurations. A size of five was selected to provide directed exploitation without eliminating the stochastic variation required for continued exploration. Variant One reduced the tournament size to two. The reduction to two minimised selection pressure, 
+baseline selection pressure. Tournament selection exerts pressure proportional to tournament size: a larger pool increases the probability 
+that the highest-fitness individual is selected, thereby amplifying the reproductive advantage of superior configurations. A size of five was 
+selected to provide directed exploitation without eliminating the stochastic variation required for continued exploration. Variant 1 reduced the tournament size to two. The reduction to two minimised selection pressure, 
 thereby allowing mathematically weaker individuals to survive longer and preventing the rapid domination of early local optima. 
-Variant Two implemented an expanded fitness sharing penalty utilising a niche radius of 12. A radius of 12 aggressively penalised 
-structurally similar antenna layouts to enforce the primary hypothesis. Variant Three substantially increased the mutation probability 
+Variant 2 implemented an expanded fitness sharing penalty utilising a niche radius of 12. A radius of 12 aggressively penalised 
+structurally similar antenna layouts to enforce the primary hypothesis. Variant 3 substantially increased the mutation probability 
 to 0.25 to test the ability of the algorithm to escape deep local optima through continuous, high-frequency stochastic perturbation.
 
 \subsection{Statistical Analysis Methodology}
