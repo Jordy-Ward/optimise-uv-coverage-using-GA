@@ -56,8 +56,8 @@ plt.fill_between(sa_eval_points[::downsample],
 # plt.title('Convergence Trajectories: Simulated Annealing vs. GA Variants (30 Runs)', fontsize=14)
 
 # Drastically increased from 14 to 22
-plt.xlabel('Total Objective Function Evaluations', fontsize=30) 
-plt.ylabel('Weighted $uv$-Coverage Density Score', fontsize=30) 
+plt.xlabel('Total Objective Function Eval.', fontsize=30) 
+plt.ylabel('Weighted $uv$-Density Score', fontsize=30) 
 
 # Drastically increased from 12 to 18
 plt.tick_params(axis='both', which='major', labelsize=25) 
