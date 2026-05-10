@@ -38,9 +38,9 @@ Stellenbosch, South Africa \\
 \begin{abstract}
 The design of radio interferometer arrays presents a massive non-convex combinatorial optimisation problem. 
 This study investigates the discrete selection of a 16-antenna subset from the 64-pad MeerKAT array, aiming to 
-maximise central $uv$-coverage density for high-fidelity image reconstruction. A trajectory-based Simulated 
-Annealing (SA) algorithm was empirically compared against four configurations of a population-based Genetic 
-Algorithm (GA) utilising a Gaussian-weighted spatial frequency objective function. Results across 30 independent 
+maximise central $uv$-coverage density for high-fidelity image reconstruction. A trajectory-based simulated 
+annealing (SA) algorithm was empirically compared against four configurations of a population-based genetic 
+algorithm (GA) utilising a Gaussian-weighted spatial frequency objective function. Results across 30 independent 
 executions demonstrate that SA significantly outperforms all evolutionary variants ($p = 1.88445 \times 10^{-11}$). 
 Topographic analysis reveals that SA successfully isolated a centrally clustered antenna geometry that perfectly 
 aligned with the weighted objective. Conversely, the GA configurations suffered from premature convergence, as the 
@@ -94,8 +94,6 @@ describes the empirical procedure and parameter configurations followed during e
 Section 5 presents the research results and convergence analysis. Finally, Section 6 summarises 
 the findings and concludes the report.
 
-The following section establishes the theoretical foundation of radio interferometry and 
-the metaheuristic methods applied to the optimisation problem.
 \section{Background}
 
 The background section provides the theoretical context and outline for the remainder of the discussion. 
@@ -129,8 +127,8 @@ domain over the observation period.
 
 The critical nature of the antenna layout problem lies in the resulting sampling distribution. 
 Every unsampled region in the $uv$-plane corresponds to missing spatial information in the final 
-reconstructed image. Missing information leads to noise artefacts known as sidelobes in the Point 
-Spread Function, abbreviated as PSF. An optimal antenna layout maximises the density of the $uv$-coverage. 
+reconstructed image. Missing information leads to noise artefacts known as sidelobes in the point 
+spread function, abbreviated as PSF. An optimal antenna layout maximises the density of the $uv$-coverage. 
 Maximum density ensures high-fidelity reconstructions that effectively distinguish faint astronomical 
 structures from instrumental noise.
 
@@ -150,8 +148,8 @@ to mathematically approximate the dense core demonstrated by the full configurat
 \subsection{Optimisation Complexity}
 Determination of the optimal placement of antennas within a fixed geographic area is a non-convex 
 combinatorial optimisation problem characterised by an immense search space. For a configuration 
-utilising a specific number of active antennas, $k$, selected from a total number of available 
-physical pads, $n$, the number of unique combinations, $C$, is formalised as
+utilising a specific $k$ number of active antennas, from a total number of available 
+physical $n$ pads, the number of unique combinations $C$ is formalised as
 \begin{equation}
 C(n, k) = \binom{n}{k} = \frac{n!}{k!(n-k)!}.
 \end{equation}
@@ -182,7 +180,7 @@ the exploration-exploitation trade-off inherent to all combinatorial optimisatio
 The optimisation of radio interferometry arrays is a well-documented challenge in 
 astronomical literature. Prior work has addressed the antenna placement problem using continuous optimisation 
 techniques, including particle swarm optimisation and standard evolutionary algorithms 
-applied to Very Long Baseline Interferometry networks~\cite{thompson2017}. The majority 
+applied to very long baseline interferometry networks~\cite{thompson2017}. The majority 
 of this literature permits antennas to occupy arbitrary geographical coordinates rather 
 than a fixed discrete grid.
 
@@ -208,20 +206,26 @@ promising regions of the $uv$-plane simultaneously.
 Simulated annealing was selected as the secondary metaheuristic to provide a comparative trajectory-based 
 baseline. Simulated annealing explores the search landscape by tracking a single solution. 
 The algorithm utilises the Metropolis criterion to stochastically accept inferior solutions 
-early in the search process. The acceptance of inferior solutions provides a mathematically proven mechanism 
+early in the search process. The acceptance of inferior solutions provides a mechanism 
 to escape local optima. Comparison of the population-based genetic algorithm against the trajectory-based 
-simulated annealing provides a comprehensive evaluation of search strategies for discrete aperture synthesis 
+simulated annealing provides an evaluation of search strategies for discrete aperture synthesis 
 optimisation.
 
 \subsubsection{Genetic Algorithms}
-A genetic algorithm, abbreviated as GA, is a population-based search technique inspired by Darwinian evolution~\cite{engelbrecht2007}. In the context of array design, the GA maintains a diverse pool of candidate layouts. A diverse pool allows fit genetic traits, specifically high-performing antenna pairings, to propagate through successive generations via recombination~\cite{bremermann1962}. To prevent premature convergence on local optima, a fitness sharing mechanism is utilised to penalise candidate solutions that are spatially similar. This enforces population diversity. Furthermore, an elitism mechanism guarantees the survival of the highest-performing layout across generations. The procedural flow of the GA is outlined in Algorithm 1.
+A GA is a population-based search technique inspired by Darwinian evolution~\cite{engelbrecht2007}. In the context of 
+array design, the GA maintains a diverse pool of candidate layouts. A diverse pool allows fit genetic traits, 
+specifically high-performing antenna pairings, to propagate through successive generations via 
+recombination~\cite{bremermann1962}. To prevent premature convergence on local optima, a fitness 
+sharing mechanism is utilised to penalise candidate solutions that are spatially similar. This 
+enforces population diversity. Furthermore, an elitism mechanism guarantees the survival of the 
+highest-performing layout across generations. The procedural flow of the GA is outlined in Algorithm 1.
 
 \begin{algorithm}[htbp]
 \caption{Genetic Algorithm incorporating fitness sharing, intersection crossover, and elitism.}
 \begin{algorithmic}[1]
 \State Initialise the population with a defined number of random candidate configurations
 \State Ensure each candidate configuration contains exactly the required number of active antennas
-\While{the termination criteria are not met}
+\While{the termination criterin is not met}
     \State Evaluate the raw fitness of each configuration using the weighted $uv$-density
     \State Identify the configuration with the highest raw fitness to serve as the elite individual
     \State Adjust the raw fitness of each configuration using a fitness sharing penalty based on the niche radius
@@ -240,7 +244,7 @@ A genetic algorithm, abbreviated as GA, is a population-based search technique i
 \end{algorithm}
 
 \subsubsection{Simulated Annealing}
-Simulated annealing, abbreviated as SA, is a trajectory-based metaheuristic modelled after 
+SA is a trajectory-based metaheuristic modelled after 
 the thermodynamic cooling of metals~\cite{engelbrecht2007}. The SA algorithm explores the search landscape 
 by tracking a single solution and utilising the Metropolis criterion to stochastically accept 
 inferior solutions early in the search. Acceptance of inferior solutions provides a vital 
@@ -271,8 +275,8 @@ during the empirical study.
 \section{Methodology}
 
 The methodology section details the structural design and configuration of the metaheuristic algorithms evaluated during the 
-empirical study. The section defines the objective function used to evaluate candidate solutions. Furthermore, the Simulated 
-Annealing configuration implemented as a baseline trajectory comparator is described. Finally, the section outlines the specific 
+empirical study. The section defines the objective function used to evaluate candidate solutions. Furthermore, the simulated 
+annealing configuration implemented as a baseline trajectory comparator is described. Finally, the section outlines the specific 
 variations applied to the genetic algorithm to analyse the impact of selection pressure, diversity maintenance, and mutation rates 
 on the discrete subset selection problem.
 
@@ -346,10 +350,16 @@ was strictly maintained.
 
 The empirical process evaluated the following four evolutionary configurations:
 \begin{enumerate}
-    \item \textbf{Standard Baseline:} The baseline configuration utilised standard operational parameters. The parameters included a moderate tournament size and a standard mutation rate. The baseline configuration established an evolutionary performance benchmark.
-    \item \textbf{Reduced Selection Pressure:} The tournament size was significantly reduced. The reduction was designed to decrease selection pressure. Decreased selection pressure allowed mathematically weaker individuals to survive longer. The survival of weaker individuals prevented the rapid domination of early local optima.
-    \item \textbf{Enhanced Diversity Maintenance:} A fitness sharing mechanism utilising an expanded niche radius was implemented. The expanded radius aggressively penalised candidate configurations possessing high spatial similarity. The spatial penalty forced the population to distribute across multiple distinct peaks in the search landscape rather than converging on a single topography.
-    \item \textbf{High-Frequency Mutation:} The probability of mutation was substantially increased. The increased mutation rate injected a high degree of stochastic variation into the offspring generation. The stochastic variation tested the ability of the algorithm to escape deep local optima through continuous, aggressive perturbation.
+    \item \textbf{Standard Baseline:} The baseline configuration utilised a tpurnament size of five and a mutation rate 0.15.
+     The parameters included a moderate tournament size and a standard mutation rate. The baseline configuration established an evolutionary performance benchmark.
+    \item \textbf{Reduced Selection Pressure:} The tournament size was reduced from five to two. The reduction was designed to decrease selection pressure. Decreased selection pressure allowed mathematically weaker individuals to survive longer. The survival of weaker individuals prevented the rapid domination of early local optima.
+    \item \textbf{Enhanced Diversity Maintenance:} A fitness sharing mechanism utilising an expanded niche radius of 12 was 
+    implemented. The expanded radius aggressively penalised candidate configurations possessing high spatial similarity. The spatial penalty forced the population to distribute across multiple distinct peaks in the search landscape rather than converging on a single topography.
+    \item \textbf{High-Frequency Mutation:} The probability of mutation was increased 
+    from 0.15 to 0.25. The elevated rate implied that on average four of the 16 active 
+    antenna positions were perturbed in every offspring, constituting a 25\% structural 
+    change per generation. The increased mutation rate tested the ability of the 
+    algorithm to escape deep local optima through continuous, aggressive perturbation.
 \end{enumerate}
 
 \subsection{Fitness Sharing Mechanism}
@@ -378,9 +388,17 @@ to solve the discrete subset selection problem.
 The empirical procedure section details the experimental setup utilised to evaluate the metaheuristic algorithms. The section begins by defining the specific experimental hypotheses and the benchmark problem. The narrative subsequently specifies the control parameters implemented for the simulated annealing baseline and the genetic algorithm variants, including explicit mathematical motivations for their selection. Finally, the section formalises the statistical testing methodology utilised to validate the research results.
 
 \subsection{Experimental Objectives and Benchmark Problem}
-The empirical study investigated the relative performance of population-based and trajectory-based metaheuristics applied to a highly deceptive search landscape. The benchmark problem utilised for evaluation was the MeerKAT 64-antenna array discrete subset selection problem. The physical coordinates of the 64 MeerKAT pads served as the static dataset.
+The empirical study investigated the relative performance of population-based and trajectory-based 
+metaheuristics applied to a highly deceptive search landscape. The benchmark problem utilised for 
+evaluation was the MeerKAT 64-antenna array discrete subset selection problem. The physical coordinates 
+of the 64 MeerKAT pads served as the static dataset.
 
-The primary hypothesis postulated that the genetic algorithm variant utilising enhanced diversity maintenance (Variant Two) would achieve superior $uv$-coverage density compared to the standard evolutionary configurations and the simulated annealing baseline. The rugged nature of the spatial frequency landscape heavily penalises premature convergence. Therefore, explicit mathematical mechanisms designed to force population distribution across multiple local optima should theoretically yield superior global solutions. 
+The primary hypothesis postulated that the genetic algorithm variant two utilising enhanced diversity 
+maintenance would achieve superior $uv$-coverage density compared to the standard 
+evolutionary configurations and the simulated annealing baseline. The rugged nature of the spatial 
+frequency landscape heavily penalises premature convergence. Therefore, explicit mathematical 
+mechanisms designed to force population distribution across multiple local optima should theoretically 
+yield superior global solutions. 
 
 \subsection{Execution Environment and Sampling}
 The simulated annealing algorithm and the genetic algorithm variants possess inherently stochastic properties. A single execution does not provide a reliable metric of algorithmic efficacy. Therefore, a total of 30 independent executions were performed for each distinct algorithmic configuration. The 30 independent runs ensured a statistically significant sample size for subsequent non-parametric performance analysis. A sample of 30 satisfies the conventional minimum threshold for applying the Central Limit Theorem to sample statistics and provides sufficient statistical power for the Mann-Whitney U test to detect moderate effect sizes at a significance level of $\alpha = 0.05$. No random seeds were fixed across executions; all stochastic initialisations drew independently from the system entropy pool to guarantee genuine run independence.
