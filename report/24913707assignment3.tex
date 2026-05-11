@@ -178,7 +178,7 @@ the exploration-exploitation trade-off inherent to all combinatorial optimisatio
 
 \subsection{Review of Current Literature}
 The optimisation of radio interferometry arrays is a well-documented challenge in 
-astronomical literature. Prior work has addressed the antenna placement problem using continuous optimisation 
+astronomical literature. Prior work addressed the antenna placement problem using continuous optimisation 
 techniques, including particle swarm optimisation and standard evolutionary algorithms 
 applied to very long baseline interferometry networks~\cite{thompson2017}. The majority 
 of this literature permits antennas to occupy arbitrary geographical coordinates rather 
@@ -207,7 +207,7 @@ Simulated annealing was selected as the secondary metaheuristic to provide a com
 baseline. Simulated annealing explores the search landscape by tracking a single solution. 
 The algorithm utilises the Metropolis criterion to stochastically accept inferior solutions 
 early in the search process. The acceptance of inferior solutions provides a mechanism 
-to escape local optima. Comparison of the population-based genetic algorithm against the trajectory-based 
+to escape local optima~\cite{engelbrecht2007}. Comparison of the population-based genetic algorithm against the trajectory-based 
 simulated annealing provides an evaluation of search strategies for discrete aperture synthesis 
 optimisation.
 
@@ -225,7 +225,7 @@ highest-performing layout across generations. The procedural flow of the GA is o
 \begin{algorithmic}[1]
 \State Initialise the population with a defined number of random candidate configurations
 \State Ensure each candidate configuration contains exactly the required number of active antennas
-\While{the termination criterin is not met}
+\While{the termination criterion is not met}
     \State Evaluate the raw fitness of each configuration using the weighted $uv$-density
     \State Identify the configuration with the highest raw fitness to serve as the elite individual
     \State Adjust the raw fitness of each configuration using a fitness sharing penalty based on the niche radius
@@ -350,7 +350,7 @@ was strictly maintained.
 
 The empirical process evaluated the following four evolutionary configurations:
 \begin{enumerate}
-    \item \textbf{Standard Baseline:} The baseline configuration utilised a tpurnament size of five and a mutation rate 0.15.
+    \item \textbf{Standard Baseline:} The baseline configuration utilised a tournament size of five and a mutation rate 0.15.
      The parameters included a moderate tournament size and a standard mutation rate. The baseline configuration established an evolutionary performance benchmark.
     \item \textbf{Reduced Selection Pressure:} The tournament size was reduced from five to two. The reduction was designed to decrease selection pressure. Decreased selection pressure allowed mathematically weaker individuals to survive longer. The survival of weaker individuals prevented the rapid domination of early local optima.
     \item \textbf{Enhanced Diversity Maintenance:} A fitness sharing mechanism utilising an expanded niche radius of 12 was 
@@ -521,9 +521,9 @@ algorithm to converge reliably from any starting point, as the Metropolis criter
 the influence of the initial random configuration during the high-temperature exploration phase.
  
 Conversely, all four genetic algorithm configurations failed to surpass the simulated annealing
-baseline. The Standard Baseline achieved the highest mean among evolutionary configurations at
+baseline. The standard baseline achieved the highest mean among evolutionary configurations at
 14683.01, representing a deficit of 243.23 points relative to the simulated annealing mean.
-Variant One and Variant Three exhibited the highest standard deviations of 44.15 and 48.64
+Variant one and variant three exhibited the highest standard deviations of 44.15 and 48.64
 respectively, and the widest performance ranges, indicating severe run-to-run inconsistency.
 The elevated variance in these configurations suggests that reducing selection pressure or
 increasing the mutation rate made the algorithms highly sensitive to the stochastic conditions
@@ -555,16 +555,15 @@ exploitation dynamics and final performance discrepancies between configurations
 \end{figure}
  
 \subsubsection{Simulated Annealing Trajectory}
-The macroscopic view confirms that simulated annealing began with the lowest initial
-performance among all configurations. The expected behaviour of a trajectory-based
-algorithm initialising from a single random 16-antenna layout: the first evaluation reflects
+The expected behaviour of a trajectory-based
+algorithm initialising from a single random 16-antenna layout is that the first evaluation reflects
 purely random placement, and the cooling schedule must invest many early iterations in
 thermodynamic exploration before meaningful exploitation can occur. Despite this slow start,
 the algorithm demonstrated continuous, uninterrupted improvement throughout the full evaluation
 budget. By approximately 200,000 evaluations, simulated annealing surpassed the final
-performance of the Standard Baseline GA and continued to improve for the remaining 300,000
+performance of the standard baseline GA and continued to improve for the remaining 300,000
 iterations. The sustained late-stage gain is consistent with the theoretical behaviour of a
-well-calibrated geometric cooling schedule, wherein the temperature decreases sufficiently
+well-calibrated geometric cooling schedule, where the temperature decreases sufficiently
 slowly to permit fine-grained local refinement during the final exploitation phase.
  
 \subsubsection{Genetic Algorithm Convergence and Plateau}
@@ -593,7 +592,7 @@ of a population prematurely trapped in a local optimum basin.
 The three GA variants exhibited distinct failure modes that illuminate the landscape topology
 of the MeerKAT subset selection problem.
  
-Variant One reduced the tournament size from five to two, which minimised selection pressure
+Variant one reduced the tournament size from five to two. The reduction minimised selection pressure
 and introduced a degree of genetic drift into the population dynamics. With weak selection
 pressure, the algorithm failed to consistently amplify high-fitness antenna pairings across
 generations. The population effectively performed a near-random walk across the configuration
@@ -601,7 +600,7 @@ space rather than a directed search. The consequence was the lowest mean perform
 configurations at 14449.83, confirming that an absence of selection pressure is as harmful as
 premature convergence on this rugged landscape.
  
-Variant Three increased the mutation rate from 0.15 to 0.25. In this discrete binary domain,
+Variant three increased the mutation rate from 0.15 to 0.25. In this discrete binary domain,
 mutation operates by swapping an active antenna with an inactive pad. At a rate of 0.25, each
 individual active antenna position has a 25\% probability of being displaced per generation.
 For a 16-antenna configuration, this implies that on average four antenna positions are
@@ -609,11 +608,11 @@ perturbed in every offspring, constituting a structural change of 25\% of the en
 array. While high mutation theoretically enables escape from local optima, the perturbation
 magnitude was too large to permit fine-grained exploitation of high-fitness regions. Well-adapted
 antenna sub-groupings were disrupted by mutation at a rate faster than selection could rebuild
-them, resulting in a mean performance of 14452.49 that was marginally superior to Variant One
-but still substantially below the Standard Baseline.
+them, resulting in a mean performance of 14452.49 that was marginally superior to variant one
+but still substantially below the standard baseline GA.
  
-Variant Two, which implemented an expanded fitness sharing niche radius of 12, exhibited
-convergence trajectories that were consistently below the Standard Baseline despite utilising
+Variant two implemented an expanded fitness sharing niche radius of 12 and exhibited
+convergence trajectories that were consistently below the standard baseline despite utilising
 identical selection pressure and mutation parameters. The expanded radius aggressively penalised
 structurally similar individuals, forcing the population to distribute across multiple distinct
 fitness peaks. However, the penalty function effectively reduced the selective advantage of the
@@ -651,7 +650,7 @@ Mann-Whitney U tests were executed utilising a significance threshold of $\alpha
 The Mann-Whitney U test was selected due to its non-parametric nature, as metaheuristic
 performance distributions cannot be assumed to be Gaussian.
  
-Comparison of the Standard Baseline GA against simulated annealing yielded a $p$-value of
+Comparison of the standard baseline GA against simulated annealing yielded a $p$-value of
 $1.88445 \times 10^{-11}$. The calculated value was strictly less than the $\alpha$ threshold by
 a margin of eleven orders of magnitude. Therefore, the null hypothesis was rejected. The
 statistical rejection definitively confirms that the simulated annealing algorithm was
@@ -660,11 +659,11 @@ placement problem. Furthermore, the magnitude of the $p$-value indicates that th
 is not a marginal or borderline result but a robust and decisive outcome that would be
 reproduced under any reasonable significance threshold.
  
-A comparison of Variant Two against the Standard Baseline GA yielded a $p$-value of $1.00$.
+A comparison of variant two against the standard baseline GA yielded a $p$-value of $1.00$.
 A value of 1.00 indicates that the direction of the test statistic was entirely opposed to the
-stated hypothesis: the performance distribution of Variant Two lay strictly below that of the
-Standard Baseline in every single one of the 30 independent executions. The expanded niche
-radius did not merely fail to improve performance; it actively and consistently degraded it.
+stated hypothesis. The performance distribution of variant two lay strictly below that of the
+standard baseline in every single one of the 30 independent executions. The expanded niche
+radius did not merely fail to improve performance, it actively and consistently degraded it.
 Consequently, the primary experimental hypothesis formulated in the Empirical Procedure section
 was completely invalidated. Aggressive diversity maintenance via fitness sharing provided no
 mathematical advantage on this objective function and constituted a net harm to the
@@ -718,7 +717,7 @@ window projected onto a $1024 \times 1024$ spatial frequency grid.
 Visual inspection of the physical layouts reveals a striking geometric divergence between the
 two search strategies. The optimal SA configuration isolates a layout with a densely
 concentrated central core of antennas surrounded by a sparse outer ring. The concentrated
-core generates an extensive volume of short baseline vectors, which map directly to the central
+core generates an extensive volume of short baseline vectors that map directly to the central
 region of the $uv$-plane and coincide precisely with the high-value region of the Gaussian
 weighting matrix applied by the objective function. The geometric strategy is the
 theoretically natural response to a centrally weighted objective: an algorithm that
@@ -730,7 +729,7 @@ exploitation on this fitness landscape.
 
 Conversely, the optimal GA configuration exhibits a more uniformly dispersed geographical
 footprint across the available pad positions. The dispersed geometry generates a greater
-volume of long baseline vectors, which trace extensive elliptical arcs across the outer regions
+volume of long baseline vectors that trace extensive elliptical arcs across the outer regions
 of the $uv$-plane. These outer-edge tracks contribute a large number of raw, unweighted
 $uv$-plane pixels, as is visible in Figure~\ref{fig:ga_uv}. However, the dispersed baseline
 geometry produces a comparatively sparse central sampling region that fails to capture the
@@ -751,7 +750,7 @@ denser toward the outer boundary. The Gaussian weighting matrix assigns exponent
 decaying values to these outer pixels, meaning that the additional raw coverage area
 contributed by the GA layout carries negligible mathematical weight in the objective function.
 The topographic analysis therefore provides a complete geometric explanation for the
-quantitative superiority of simulated annealing: the algorithm identified the physically
+quantitative superiority of simulated annealing. The algorithm identified the physically
 clustered configuration that is the optimal solution for a centrally weighted spatial frequency
 objective, while the evolutionary search converged prematurely on a dispersed solution that
 optimises unweighted coverage at the expense of the weighted score.
@@ -791,14 +790,14 @@ function rewards.
 
 The assignment yielded several important insights into the relationship between algorithm 
 design and problem landscape topology. The most significant lesson was that operator 
-choice is not a secondary concern: the intersection crossover operator, while elegant in 
+choice is not a secondary concern. The intersection crossover operator, while elegant in 
 preserving the cardinality constraint, proved fundamentally misaligned with the geometric 
 structure of the objective function. The result highlights that metaheuristic performance cannot 
 be evaluated in isolation from the problem domain. Additionally, the experiment demonstrated 
 that diversity mechanisms such as fitness sharing are only beneficial when the fitness 
 landscape contains multiple well-separated optima of comparable quality. When the global 
-optimum lies in a single clustered region, as in this case, diversity enforcement actively 
-hinders convergence. Finally, the study reinforced the value of statistical rigour: without 
+optimum lies in a single clustered region diversity enforcement actively 
+hinders convergence. Finally, the study reinforced the value of statistical rigour. Without 
 the 30-run sampling and Mann-Whitney analysis, the consistent superiority of simulated 
 annealing could have been attributed to a fortunate initialisation rather than a structural 
 algorithmic advantage.
